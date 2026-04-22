@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Quid Money</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1d3557; --navy2: #162840; --green: #2d6a4f; --green2: #245a41;
+      --green-light: #e8f4ef; --bg: #f4f6f8; --bg2: #ffffff; --bg3: #eef1f4;
+      --text: #1d3557; --muted: #7a8ea0; --border: #dde4eb; --white: #ffffff;
+    }
+    body { background: var(--bg); font-family: 'Nunito Sans', sans-serif; }
+    #root { max-width: 420px; margin: 0 auto; min-height: 100vh; }
+    .app { max-width: 420px; margin: 0 auto; min-height: 100vh; background: var(--bg); color: var(--text); }
+    .screen { min-height: 100vh; display: flex; flex-direction: column; animation: slideUp 0.35s cubic-bezier(0.16,1,0.3,1); }
+    @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes popIn { from { transform:scale(0.5); opacity:0; } to { transform:scale(1); opacity:1; } }
+    .login-bg { background: linear-gradient(160deg, var(--navy) 0%, var(--navy2) 100%); padding: 3rem 2rem 2rem; flex: 1; display: flex; flex-direction: column; }
+    .logo-text { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--white); }
+    .logo-text span { color: #4db882; }
+    .logo-sub { font-size: 0.65rem; color: rgba(255,255,255,0.45); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px; }
+    .login-heading { font-family: 'Nunito', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.5rem; color: var(--white); }
+    .login-sub { color: rgba(255,255,255,0.55); font-size: 0.95rem; margin-bottom: 2.5rem; }
+    .logo-mark { margin-bottom: 3rem; }
+    .input-group { margin-bottom: 1.25rem; }
+    .input-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); display: block; margin-bottom: 0.5rem; font-weight: 600; }
+    .input-field { width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 0.9rem 1rem; font-size: 1rem; font-family: 'Nunito Sans', sans-serif; color: var(--white); outline: none; transition: border-color 0.2s; }
+    .input-field::placeholder { color: rgba(255,255,255,0.3); }
+    .input-field:focus { border-color: #4db882; }
+    .input-field.light { background: var(--white); border: 1px solid var(--border); color: var(--text); }
+    .input-field.light::placeholder { color: var(--muted); }
+    .input-field.light:focus { border-color: var(--green); }
+    .btn-primary { width: 100%; background: var(--green); color: var(--white); border: none; border-radius: 10px; padding: 1rem; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+    .btn-primary:hover { background: var(--green2); }
+    .btn-ghost { background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.9rem; cursor: pointer; width: 100%; margin-top: 0.75rem; transition: all 0.2s; font-family: 'Nunito Sans', sans-serif; }
+    .error-box { background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.3); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: #ff9090; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--white); position: sticky; top: 0; z-index: 10; }
+    .topbar-logo { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--navy); }
+    .topbar-logo span { color: var(--green); }
+    .avatar { width: 34px; height: 34px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem; color: var(--white); cursor: pointer; font-family: 'Nunito', sans-serif; }
+    .dash-hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%); padding: 1.5rem 1.5rem 2.5rem; position: relative; overflow: hidden; }
+    .greeting { font-size: 0.75rem; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.2rem; font-weight: 600; }
+    .greeting-name { font-family: 'Nunito', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--white); margin-bottom: 0.4rem; }
+    .trade-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(77,184,130,0.15); border: 1px solid rgba(77,184,130,0.3); border-radius: 20px; padding: 0.2rem 0.75rem; font-size: 0.72rem; color: #4db882; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; font-weight: 700; }
+    .balance-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 1.25rem; }
+    .balance-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 0.4rem; font-weight: 600; }
+    .balance-amount { font-family: 'Nunito', sans-serif; font-size: 2.4rem; font-weight: 900; color: var(--white); line-height: 1; margin-bottom: 1rem; }
+    .balance-bar-bg { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 0.6rem; overflow: hidden; }
+    .balance-bar-fill { height: 100%; background: linear-gradient(90deg, #4db882, var(--green)); border-radius: 3px; }
+    .balance-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: rgba(255,255,255,0.45); }
+    .section { padding: 1.25rem 1.5rem; }
+    .section-title { font-family: 'Nunito', sans-serif; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; font-weight: 700; }
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: 0 1px 4px rgba(29,53,87,0.06); }
+    .stat-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .stat-val { font-family: 'Nunito', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--navy); line-height: 1; }
+    .stat-lab { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+    .cta-banner { background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; box-shadow: 0 4px 16px rgba(45,106,79,0.3); }
+    .cta-text h3 { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--white); }
+    .cta-text p { font-size: 0.8rem; color: rgba(255,255,255,0.65); margin-top: 0.2rem; }
+    .cta-arrow { width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem; }
+    .products-header { padding: 1.5rem 1.5rem 0.5rem; }
+    .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: var(--green); font-size: 0.9rem; font-weight: 600; cursor: pointer; padding: 0; margin-bottom: 1.25rem; font-family: 'Nunito Sans', sans-serif; }
+    .page-title { font-family: 'Nunito', sans-serif; font-size: 1.9rem; font-weight: 900; color: var(--navy); line-height: 1.1; margin-bottom: 0.4rem; }
+    .page-sub { color: var(--muted); font-size: 0.85rem; }
+    .product-list { padding: 1rem 1.5rem 2rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .product-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 4px rgba(29,53,87,0.05); }
+    .product-card:hover { border-color: var(--green); box-shadow: 0 4px 16px rgba(45,106,79,0.12); }
+    .product-icon { width: 44px; height: 44px; background: var(--green-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .product-info { flex: 1; }
+    .product-name { font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800; color: var(--navy); margin-bottom: 0.2rem; }
+    .product-desc { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; }
+    .product-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag { font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 20px; background: var(--green-light); color: var(--green); }
+    .product-arrow { color: var(--muted); font-size: 1rem; }
+    .form-wrap { padding: 1.5rem; flex: 1; background: var(--bg); }
+    .form-input-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 0.5rem; font-weight: 700; }
+    .selected-product { display: flex; align-items: center; gap: 0.85rem; background: var(--green-light); border: 1.5px solid rgba(45,106,79,0.2); border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1.75rem; }
+    .sel-icon { font-size: 1.5rem; }
+    .sel-name { font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--green); }
+    .sel-amt { font-size: 0.75rem; color: var(--muted); }
+    .form-footer { padding: 1rem 1.5rem 2rem; background: var(--bg); }
+    textarea.input-field { resize: none; min-height: 90px; }
+    .confirm-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem; text-align: center; background: var(--bg); }
+    .confirm-icon { width: 80px; height: 80px; background: var(--green-light); border: 2px solid rgba(45,106,79,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.5rem; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); color: var(--green); }
+    .confirm-title { font-family: 'Nunito', sans-serif; font-size: 2rem; font-weight: 900; color: var(--navy); margin-bottom: 0.5rem; }
+    .confirm-sub { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 2rem; max-width: 280px; }
+    .confirm-ref { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 2rem; width: 100%; }
+    .ref-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; font-weight: 700; }
+    .ref-num { font-family: 'Nunito', sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--navy); }
+    .next-steps { text-align: left; width: 100%; margin-bottom: 2rem; }
+    .step-item { display: flex; gap: 0.85rem; align-items: flex-start; margin-bottom: 0.85rem; }
+    .step-num { width: 22px; height: 22px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; color: white; flex-shrink: 0; margin-top: 1px; font-family: 'Nunito', sans-serif; }
+    .step-text { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+    .step-text strong { color: var(--navy); }
+    .bottom-nav { display: flex; justify-content: space-around; padding: 0.75rem 0; border-top: 1px solid var(--border); background: var(--white); position: sticky; bottom: 0; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 0.6rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); cursor: pointer; padding: 0.25rem 1rem; border-radius: 8px; font-weight: 700; }
+    .nav-item.active { color: var(--green); }
+    .nav-item span:first-child { font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+const SUPABASE_URL = 'https://njlpnkcwxjlrbciaqyjc.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qbHBua2N3eGpscmJjaWFxeWpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3Njk4NjcsImV4cCI6MjA5MjM0NTg2N30.2n6HtgsAObLjgnlsviBUSmPytrLnPFhaq9bT-fLBp0U';
+const db = {
+  get: async (table, query = '') => {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`, {
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}`, 'Content-Type': 'application/json' }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  },
+  insert: async (table, data) => {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+};
+const SCREENS = { LOGIN: 'login', DASHBOARD: 'dashboard', PRODUCTS: 'products', FORM: 'form', CONFIRM: 'confirm' };
+const PRODUCTS = [
+  { id: 'flash', icon: '⚡', name: 'Invoice Finance', desc: 'Turn your unpaid invoices into instant cash. No waiting 30-90 days.', amount: 'Up to $150,000', time: 'As fast as 2hrs' },
+  { id: 'float', icon: '🚗', name: 'Vehicle Finance', desc: 'Fund your ute, van or fleet. Drive away and keep cash in the business.', amount: 'Up to $150,000', time: '24hr approval' },
+  { id: 'gear', icon: '🔧', name: 'Equipment Finance', desc: 'Fund your tools & machinery. Keep cash in the business.', amount: 'Up to $200,000', time: '24hr approval' },
+  { id: 'ato', icon: '📋', name: 'Tax Bill Finance', desc: 'Spread your ATO bill into easy weekly repayments. No stress.', amount: 'Up to $100,000', time: '24hr approval' },
+  { id: 'growth', icon: '🏗️', name: 'Business Loan', desc: 'Lump sum to grow your crew, take on bigger jobs or open a new yard.', amount: 'Up to $500,000', time: '48hr approval' },
+];
+function App() {
+  const [screen, setScreen] = useState(SCREENS.LOGIN);
+  const [phone, setPhone] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [client, setClient] = useState(null);
+  const [financeAccount, setFinanceAccount] = useState(null);
+  const [invoices, setInvoices] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [amount, setAmount] = useState('');
+  const [reason, setReason] = useState('');
+  const [callPref, setCallPref] = useState('Morning (7am - 11am)');
+  const [submitting, setSubmitting] = useState(false);
+  const [refNum, setRefNum] = useState('');
+  const handleLogin = async () => {
+    if (!phone.trim()) return;
+    setLoginLoading(true);
+    setLoginError('');
+    try {
+      const clean = phone.replace(/\s/g, '');
+      const clients = await db.get('clients', `phone=eq.${clean}&select=*`);
+      if (!clients || clients.length === 0) {
+        setLoginError('No account found. Contact Quid Money to get set up.');
+        setLoginLoading(false);
+        return;
+      }
+      const found = clients[0];
+      setClient(found);
+      const accounts = await db.get('finance_accounts', `client_id=eq.${found.id}&select=*`);
+      setFinanceAccount(accounts?.[0] || null);
+      const invs = await db.get('invoices', `client_id=eq.${found.id}&select=*`);
+      setInvoices(invs || []);
+      setScreen(SCREENS.DASHBOARD);
+    } catch (e) {
+      setLoginError('Connection error: ' + e.message);
+    }
+    setLoginLoading(false);
+  };
+  const handleSubmit = async () => {
+    if (!amount) return;
+    setSubmitting(true);
+    try {
+      await db.insert('applications', {
+        client_id: client.id,
+        product_name: selectedProduct.name,
+        amount_requested: parseFloat(amount),
+        reason: reason,
+        call_preference: callPref,
+        status: 'pending'
+      });
+      setRefNum('QM-' + Math.floor(100000 + Math.random() * 900000));
+      setScreen(SCREENS.CONFIRM);
+    } catch (e) {
+      alert('Submission failed. Please try again.');
+    }
+    setSubmitting(false);
+  };
+  const available = financeAccount ? financeAccount.limit_amount - financeAccount.used_amount : 0;
+  const usedPct = financeAccount ? (financeAccount.used_amount / financeAccount.limit_amount) * 100 : 0;
+  const initials = client?.full_name?.split(' ').map(n => n[0]).join('').slice(0,2) || 'QM';
+  return (
+    <div className="app">
+      {screen === SCREENS.LOGIN && (
+        <div className="screen">
+          <div className="login-bg">
+            <div className="logo-mark">
+              <div className="logo-text">Quid<span>Money</span></div>
+              <div className="logo-sub">Asset | Business | Personal</div>
+            </div>
+            <div className="login-heading">Welcome<br/>Back, Mate.</div>
+            <div className="login-sub">Finance built for the trade.</div>
+            <div className="input-group">
+              <label className="input-label">Mobile Number</label>
+              <input className="input-field" type="tel" placeholder="04XX XXX XXX"
+                value={phone} onChange={e => { setPhone(e.target.value); setLoginError(''); }}
+                onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+            </div>
+            {loginError && <div className="error-box">{loginError}</div>}
+            <button className="btn-primary" onClick={handleLogin} disabled={loginLoading} style={{opacity: loginLoading ? 0.7 : 1}}>
+              {loginLoading ? 'Looking you up...' : 'Log In'}
+            </button>
+            <button className="btn-ghost">Use Face ID Instead</button>
+            <div style={{marginTop:'auto',paddingTop:'2rem',textAlign:'center',fontSize:'0.72rem',color:'rgba(255,255,255,0.3)'}}>
+              🔒 256-bit encrypted · Australian Credit Licence
+            </div>
+          </div>
+        </div>
+      )}
+      {screen === SCREENS.DASHBOARD && (
+        <div className="screen">
+          <div className="topbar">
+            <div className="topbar-logo">Quid<span>Money</span></div>
+            <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+              <span style={{fontSize:'1.1rem'}}>🔔</span>
+              <div className="avatar">{initials}</div>
+            </div>
+          </div>
+          <div className="dash-hero">
+            <div className="greeting">G'day,</div>
+            <div className="greeting-name">{client?.full_name || 'Mate'}</div>
+            <div className="trade-badge">⚡ {client?.trade || 'Tradie'}</div>
+            {financeAccount ? (
+              <div className="balance-card">
+                <div className="balance-label">{financeAccount.product} · Available</div>
+                <div className="balance-amount">${available.toLocaleString()}</div>
+                <div className="balance-bar-bg">
+                  <div className="balance-bar-fill" style={{width:`${usedPct}%`}} />
+                </div>
+                <div className="balance-meta">
+                  <span>${financeAccount.used_amount.toLocaleString()} used</span>
+                  <span>${financeAccount.limit_amount.toLocaleString()} limit</span>
+                </div>
+              </div>
+            ) : (
+              <div className="balance-card">
+                <div className="balance-label">No active finance account</div>
+                <div style={{color:'rgba(255,255,255,0.5)',fontSize:'0.85rem',marginTop:'0.5rem'}}>Contact Quid Money to get started.</div>
+              </div>
+            )}
+          </div>
+          <div className="section">
+            <div className="section-title">Your Account</div>
+            <div className="stat-row">
+              <div className="stat-card"><div className="stat-icon">📄</div><div className="stat-val">{invoices.length}</div><div className="stat-lab">Active Invoices</div></div>
+              <div className="stat-card"><div className="stat-icon">✅</div><div className="stat-val">On Track</div><div className="stat-lab">Repayment Status</div></div>
+            </div>
+            <div className="section-title">Need More?</div>
+            <div className="cta-banner" onClick={() => setScreen(SCREENS.PRODUCTS)}>
+              <div className="cta-text"><h3>Request a Product</h3><p>Vehicles, loans, equipment & more</p></div>
+              <div className="cta-arrow">→</div>
+            </div>
+          </div>
+          <div className="bottom-nav">
+            <div className="nav-item active"><span>🏠</span><span>Home</span></div>
+            <div className="nav-item" onClick={() => setScreen(SCREENS.PRODUCTS)}><span>💼</span><span>Products</span></div>
+            <div className="nav-item"><span>📄</span><span>Invoices</span></div>
+            <div className="nav-item"><span>👤</span><span>Profile</span></div>
+          </div>
+        </div>
+      )}
+      {screen === SCREENS.PRODUCTS && (
+        <div className="screen">
+          <div className="topbar">
+            <div className="topbar-logo">Quid<span>Money</span></div>
+            <div className="avatar">{initials}</div>
+          </div>
+          <div className="products-header">
+            <button className="back-btn" onClick={() => setScreen(SCREENS.DASHBOARD)}>← Back</button>
+            <div className="page-title">Add a<br/>Product</div>
+            <div className="page-sub" style={{marginBottom:'0.5rem'}}>As an existing client, you're pre-qualified.</div>
+          </div>
+          <div className="product-list">
+            {PRODUCTS.map(p => (
+              <div key={p.id} className="product-card" onClick={() => { setSelectedProduct(p); setScreen(SCREENS.FORM); }}>
+                <div className="product-icon">{p.icon}</div>
+                <div className="product-info">
+                  <div className="product-name">{p.name}</div>
+                  <div className="product-desc">{p.desc}</div>
+                  <div className="product-tags"><span className="tag">{p.amount}</span><span className="tag">{p.time}</span></div>
+                </div>
+                <div className="product-arrow">›</div>
+              </div>
+            ))}
+          </div>
+          <div className="bottom-nav">
+            <div className="nav-item" onClick={() => setScreen(SCREENS.DASHBOARD)}><span>🏠</span><span>Home</span></div>
+            <div className="nav-item active"><span>💼</span><span>Products</span></div>
+            <div className="nav-item"><span>📄</span><span>Invoices</span></div>
+            <div className="nav-item"><span>👤</span><span>Profile</span></div>
+          </div>
+        </div>
+      )}
+      {screen === SCREENS.FORM && selectedProduct && (
+        <div className="screen">
+          <div className="topbar">
+            <div className="topbar-logo">Quid<span>Money</span></div>
+            <div className="avatar">{initials}</div>
+          </div>
+          <div className="form-wrap">
+            <button className="back-btn" onClick={() => setScreen(SCREENS.PRODUCTS)}>← Products</button>
+            <div className="page-title">Your Request</div>
+            <div className="page-sub" style={{marginBottom:'1.5rem'}}>Fill in the details below.</div>
+            <div className="selected-product">
+              <div className="sel-icon">{selectedProduct.icon}</div>
+              <div><div className="sel-name">{selectedProduct.name}</div><div className="sel-amt">{selectedProduct.amount} · {selectedProduct.time}</div></div>
+            </div>
+            <div className="input-group">
+              <label className="form-input-label">Amount Needed ($)</label>
+              <input className="input-field light" type="number" placeholder="e.g. 25000" value={amount} onChange={e => setAmount(e.target.value)} />
+            </div>
+            <div className="input-group">
+              <label className="form-input-label">What's it for? (optional)</label>
+              <textarea className="input-field light" placeholder="e.g. New van for the crew..." value={reason} onChange={e => setReason(e.target.value)} />
+            </div>
+            <div className="input-group">
+              <label className="form-input-label">Best time to call</label>
+              <select className="input-field light" value={callPref} onChange={e => setCallPref(e.target.value)} style={{appearance:'none'}}>
+                <option>Morning (7am - 11am)</option>
+                <option>Midday (11am - 2pm)</option>
+                <option>Arvo (2pm - 5pm)</option>
+              </select>
+            </div>
+          </div>
+          <div className="form-footer">
+            <button className="btn-primary" onClick={handleSubmit} disabled={submitting} style={{opacity:submitting?0.7:1}}>
+              {submitting ? 'Submitting...' : 'Submit Request →'}
+            </button>
+          </div>
+        </div>
+      )}
+      {screen === SCREENS.CONFIRM && (
+        <div className="screen">
+          <div className="topbar">
+            <div className="topbar-logo">Quid<span>Money</span></div>
+            <div className="avatar">{initials}</div>
+          </div>
+          <div className="confirm-wrap">
+            <div className="confirm-icon">✓</div>
+            <div className="confirm-title">Request Sent!</div>
+            <div className="confirm-sub">Your {selectedProduct?.name} request is in. Our team will call you shortly.</div>
+            <div className="confirm-ref">
+              <div className="ref-label">Reference Number</div>
+              <div className="ref-num">{refNum}</div>
+            </div>
+            <div className="next-steps">
+              <div className="section-title">What Happens Next</div>
+              <div className="step-item"><div className="step-num">1</div><div className="step-text"><strong>We'll call you</strong> during your preferred time window.</div></div>
+              <div className="step-item"><div className="step-num">2</div><div className="step-text"><strong>Fast assessment</strong> — as an existing client you're already pre-qualified.</div></div>
+              <div className="step-item"><div className="step-num">3</div><div className="step-text"><strong>Funds in your account</strong> as fast as same day.</div></div>
+            </div>
+            <button className="btn-primary" onClick={() => setScreen(SCREENS.DASHBOARD)}>Back to Dashboard</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
