@@ -12,9 +12,9 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --navy: #1d3557; --navy2: #162840; --green: #2d6a4f; --green2: #245a41;
+      --navy: #2d3f56; --navy2: #22303f; --green: #2d6a4f; --green2: #245a41;
       --green-light: #e8f4ef; --bg: #f4f6f8; --bg2: #ffffff; --bg3: #eef1f4;
-      --text: #1d3557; --muted: #7a8ea0; --border: #dde4eb; --white: #ffffff;
+      --text: #2d3f56; --muted: #8a9aaa; --border: #dde4eb; --white: #ffffff;
     }
     body { background: var(--bg); font-family: 'Nunito Sans', sans-serif; }
     #root { max-width: 420px; margin: 0 auto; min-height: 100vh; }
@@ -23,9 +23,9 @@
     @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     @keyframes popIn { from { transform:scale(0.5); opacity:0; } to { transform:scale(1); opacity:1; } }
     .login-bg { background: linear-gradient(160deg, var(--navy) 0%, var(--navy2) 100%); padding: 3rem 2rem 2rem; flex: 1; display: flex; flex-direction: column; }
-    .logo-text { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.8rem; color: var(--white); }
+    .logo-text { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1.8rem; color: var(--white); letter-spacing: -0.01em; }
     .logo-text span { color: #4db882; }
-    .logo-sub { font-size: 0.65rem; color: rgba(255,255,255,0.45); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 2px; }
+    .logo-sub { font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; margin-top: 3px; font-weight: 400; font-family: 'Nunito Sans', sans-serif; }
     .login-heading { font-family: 'Nunito', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.5rem; color: var(--white); }
     .login-sub { color: rgba(255,255,255,0.55); font-size: 0.95rem; margin-bottom: 2.5rem; }
     .logo-mark { margin-bottom: 3rem; }
@@ -42,7 +42,7 @@
     .btn-ghost { background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.9rem; cursor: pointer; width: 100%; margin-top: 0.75rem; transition: all 0.2s; font-family: 'Nunito Sans', sans-serif; }
     .error-box { background: rgba(255,80,80,0.15); border: 1px solid rgba(255,80,80,0.3); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.82rem; color: #ff9090; }
     .topbar { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--white); position: sticky; top: 0; z-index: 10; }
-    .topbar-logo { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--navy); }
+    .topbar-logo { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1.25rem; color: var(--navy); letter-spacing: -0.01em; }
     .topbar-logo span { color: var(--green); }
     .avatar { width: 34px; height: 34px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem; color: var(--white); cursor: pointer; font-family: 'Nunito', sans-serif; }
     .dash-hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%); padding: 1.5rem 1.5rem 2.5rem; position: relative; overflow: hidden; }
